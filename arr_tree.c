@@ -5,45 +5,41 @@
 typedef struct Tree{
     int* arr;
 }Tree;
-Tree* create(int n){
+Tree* create_tree(int n){
     Tree* temp = (Tree*)malloc(sizeof(Tree));
-    temp->arr = (int*)malloc(sizeof(int)*(pow(2,n) - 1));
-    for (int i=0; i<pow(2,n) - 1; i++){
+    temp->arr = (int*)malloc(sizeof(int)*((int)pow(2,n) - 1));
+    for (int i=0; i<(int)pow(2,n) - 1; i++){
         temp->arr[i] = -1;
     }
     return temp;
 }
 void insert_node(Tree* tree, int value){
-    int start = 0;
+    int index = 0;
     while (1){
-        if (tree->arr[start] == -1){
-            tree->arr[start] = value;
+        if (tree->arr[index] == -1){
+            tree->arr[index] = value;
             break;
         }
-        else if (tree->arr[start] < value){
-            start = start*2+1;
+        else if (tree->arr[index] > value){
+            index = index*2+1;
         }
-        else if (tree->arr[start] >= value){
-            start = start*2+2;
+        else{
+            index = index*2+2;
         }
     }
-    
-
 }
 int main(){
-    printf("asd%d",pow(2,3));
-    Tree* tree = create(3);
-    printf("ad");
-    insert_node(tree, 234);
-    insert_node(tree, 14);
-    insert_node(tree, 23);
-    insert_node(tree, 112);
-    insert_node(tree, 123);
-    printf("a23d");
+    Tree* tree = create_tree(3);
+    insert_node(tree, 17);
+    insert_node(tree, 12);
+    insert_node(tree, 6);
+    insert_node(tree, 15);
+    insert_node(tree, 19);
+    insert_node(tree, 18);
+    insert_node(tree, 21);
     int x=0;
     while (x < 10){
-        printf("a23d\n");
-        printf("<%d,%d>",tree->arr[x], x);
+        printf("%d, ",tree->arr[x]);
         x++;
     }
     
