@@ -28,8 +28,17 @@ void insert_node(Tree* tree, int value){
         }
     }
 }
+
+void inorder(Tree* tree, int index){
+    if (tree->arr[index] != -1){
+        inorder(tree, index*2+1);
+        printf("%d ", tree->arr[index]);
+        inorder(tree, index*2+2);
+    }
+}
+
 int main(){
-    Tree* tree = create_tree(3);
+    Tree* tree = create_tree(4);
     insert_node(tree, 17);
     insert_node(tree, 12);
     insert_node(tree, 6);
@@ -37,10 +46,5 @@ int main(){
     insert_node(tree, 19);
     insert_node(tree, 18);
     insert_node(tree, 21);
-    int x=0;
-    while (x < 10){
-        printf("%d, ",tree->arr[x]);
-        x++;
-    }
-    
+    inorder(tree,0);
 }
