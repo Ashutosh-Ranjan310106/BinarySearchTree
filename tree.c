@@ -98,7 +98,7 @@ void destroy_stack(Stack* stack){
 treeNode* inorder(treeNode* root){
     if (root != NULL){
         inorder(root->left);
-        printf("%d\n",root->data);
+        printf("%d ",root->data);
         inorder(root->right);
     }
     return NULL;
@@ -183,19 +183,122 @@ void postorderIerative(treeNode* root){
 }
 
 
+treeNode* delete_leaf_node(treeNode* root, int value){
+    if (root != NULL){
+        if (root->data == value)
+            return NULL;
+        root->left = delete_leaf_node(root->left, value);
+        root->right = delete_leaf_node(root->right, value);
+    }
+    return root;
+}
 
+treeNode* findmin(treeNode* root){
+    while (root->left != NULL){
+        root = root->left;
+    }
+    return root;
+}
 
+treeNode* delete_node(treeNode* root, int val){
+    if(root == NULL){
+       return NULL;
+    }
+    if(val == root->data){
+        if(root->left == NULL){
+            treeNode* temp = root->right;
+            free(root);
+            return temp;
+        }
+        else if(root->right == NULL){
+            treeNode* temp = root->left;
+            free(root);
+            return temp;
+        }
+        treeNode* temp = findmin(root->right);
+        root->data = temp->data;
+        root->right = delete_node(root->right, temp->data);
 
+    }
+    else if(val < root->data){
+        root->left = delete_node(root->left, val);
+    }
+    else{
+        root->right = delete_node(root->right, val);
+    }
+}
+
+treeNode* get_node_sibling(treeNode* root, int key){
+    if (root == NULL){
+        return NULL;
+    }
+    if (root->left != NULL){
+        if (root->left->data == key){
+            return root->right;
+        }
+    }
+    if (root->right != NULL){
+        if (root->right->data == key){
+            return root->left;
+        }
+    }
+    treeNode* temp = get_node_sibling(root->left, key);
+    if (temp){
+        return temp;
+    }
+    temp = get_node_sibling(root->right, key);
+    return temp;
+}
+int get_node_depth(treeNode* root, int key){
+    if (root == NULL){
+        return -1;
+    }
+    if (root->data == key){
+        return 0;
+    }else if (root->data> key)
+    {   
+        int n = get_node_depth(root->left, key);
+        if (n == -1){
+            return -1;
+        }
+        return 1 + n;
+    }else{
+        int n = get_node_depth(root->right, key);
+        if (n == -1){
+            return -1;
+        }
+        return 1 + n;
+    }
+
+}
+int level(treeNode* root, int key){
+    return 1 + get_node_depth(root, key);
+}
+int get_height(treeNode* root){
+    if (root == NULL){
+        return -1;
+    }
+    int h1 = get_height(root->left);
+    int h2 = get_height(root->right);
+    if (h1 > h2){
+        return h1 + 1;
+    }else{
+        return h2 + 1;
+    }
+}
 int main(){
     BinaryTree Tree;
     Tree.root = NULL;
-    Tree.root = insert_node(Tree.root, 6);
-    Tree.root = insert_node(Tree.root, 2);
-    Tree.root = insert_node(Tree.root, 5);
-    Tree.root = insert_node(Tree.root, 3);
-    Tree.root = insert_node(Tree.root, 4);
-    Tree.root = insert_node(Tree.root, 7);
-    Tree.root = insert_node(Tree.root, 1);
+    Tree.root = insert_node(Tree.root, 17);
+    Tree.root = insert_node(Tree.root, 15);
+    Tree.root = insert_node(Tree.root, 11);
+    Tree.root = insert_node(Tree.root, 21);
+    Tree.root = insert_node(Tree.root, 16);
+    Tree.root = insert_node(Tree.root, 18);
+    Tree.root = insert_node(Tree.root, 23);
+    Tree.root = insert_node(Tree.root, 89);
+    
+    /*
     printf("clone by preorder\n");
     BinaryTree clone;
     clone.root = clone_by_preorder(Tree.root);
@@ -209,6 +312,18 @@ int main(){
     preorderIerative(Tree.root);
     printf("inorder traversal ierative\n");
     postorderIerative(Tree.root);
+    */
+    printf("inorder\n");
+    inorder(Tree.root);
+    printf("\n");
+    delete_node(Tree.root, 16);
+    printf("after deletion");
+    printf("\n");
+    inorder(Tree.root);
+    treeNode* sibling = get_node_sibling(Tree.root, 16);
 
+    sibling ? printf("%d\n", sibling->data) : printf("NULL\n");
+    printf("height %d\n", get_height(Tree.root));
+    printf("depth %d", get_node_depth(Tree.root, 17));
     return 0;   
 }
