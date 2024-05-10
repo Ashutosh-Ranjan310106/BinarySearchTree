@@ -313,16 +313,16 @@ int main(){
     printf("inorder traversal ierative\n");
     postorderIerative(Tree.root);
     */
-    printf("inorder\n");
+    printf("before deletion inorder\n");
     inorder(Tree.root);
     printf("\n");
     delete_node(Tree.root, 16);
-    printf("after deletion");
-    printf("\n");
+    printf("after deletion inorder\n");
     inorder(Tree.root);
+    printf("\n");
     treeNode* sibling = get_node_sibling(Tree.root, 16);
 
-    sibling ? printf("%d\n", sibling->data) : printf("NULL\n");
+    sibling ? printf("sibling: of 16 is %d\n", sibling->data) : printf("sibling: of 16 is NULL\n");
     printf("height %d\n", get_height(Tree.root));
     printf("depth %d", get_node_depth(Tree.root, 17));
     return 0;   
